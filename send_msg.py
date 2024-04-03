@@ -30,8 +30,11 @@ class RequestSender:
             response = self.send_request(username, question, deviceId, gameSlug, referrer)
             if response.status_code == 429:  # Too Many Requests
                 retry_after = int(response.headers.get('Retry-After', 10))  # Default to waiting 10 seconds
-                print(f"Rate limited. Retrying after {retry_after} seconds...")
-                time.sleep(retry_after)
+                # print(f"Rate limited. Retrying after {retry_after} seconds...", end='', flush=True)
+                for countdown in range(retry_after, 0, -1):
+                    print(f'\rRetrying in {countdown} seconds...', end='', flush=True)
+                    time.sleep(1)
+                print()  # Print newline after countdown completes
                 retries += 1
             elif response.status_code == 200:  # Success
                 return response
