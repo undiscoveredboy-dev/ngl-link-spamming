@@ -29,3 +29,5 @@ you just insert username target, your message, and choice the options.
      ```bash
      python send_msg.py
      ```
+
+5. enter your target, your message, and choice the options.
