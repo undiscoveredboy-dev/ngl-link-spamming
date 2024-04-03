@@ -1,0 +1,2 @@
+DEVICE_ID=YOUR_DEVICE_ID # NOT REQUIRED
+URL=https://ngl.link/api/submit # REQUIRED
