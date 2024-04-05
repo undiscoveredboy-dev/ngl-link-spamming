@@ -142,7 +142,7 @@ class MessageGenerator:
         ]
 
     def generate_message(self):
-        if random.random() < 0.9:
+        if random.random() < 1:
             return random.choice(self.messages_hacker)
         else:
             return random.choice(self.generic_messages)
