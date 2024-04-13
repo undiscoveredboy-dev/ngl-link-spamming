@@ -147,10 +147,12 @@ if __name__ == "__main__":
 
     username = input("Enter target username: ")
     spam_choice = input("Do you want to spam? (yes/no): ").lower()
+    message_input = input("Enter your message: ")
     if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
         spam_count = int(input("How many times do you want to spam?: "))
         for _ in range(spam_count):
-            message = message_generator.generate_message()
+            # message = message_generator.generate_message()
+            message = message_input
             gameSlug = game_slug_generator.generate_game_slug()
             deviceId = deviceIDGenerator().generate_deviceId()
             referrer = ""
