@@ -70,9 +70,9 @@ if __name__ == "__main__":
     load_dotenv()
     url = os.getenv("URL")
     request_sender = RequestSender(url)
-    username = input("Enter target username: ")
+    username = input("Enter target username: ") # sonysoes as flysaina
     spam_choice = input("Do you want to spam? (yes/no): ").lower().strip()
-    message_input = input("Enter your message or leave blank to use a default message: ") or "Default message"
+    message_input = input("Enter your message or leave blank to use a default message: ") or " "
 
     if spam_choice in ["yes", "y", ""]:
         spam_count = input("How many times do you want to spam? (Default is 10000): ").strip()

@@ -208,9 +208,10 @@ if __name__ == "__main__":
             referrer = ""
             response = request_sender.send_request_with_retry(username, message, deviceId, gameSlug, referrer)
             print(f'\n{_+1} of {spam_count}')
+            print(f'{response.status_code}: {response.reason} = {response.text}')
+            print(f'username: {username}')
             print(f'gameSlug: {gameSlug}')
             print(f'message : {message}')
-            print(f'{response.status_code}: {response.reason} = {response.text}')
     else:
         message = input("Enter your message: ")
         gameSlug = game_slug_selector.select_game_slug()
