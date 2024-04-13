@@ -30,11 +30,8 @@ class RequestSender:
             response = self.send_request(username, question, deviceId, gameSlug, referrer)
             if response.status_code == 429:  # Too Many Requests
                 retry_after = int(response.headers.get('Retry-After', 10))  # Default to waiting 10 seconds
-                # print(f"Rate limited. Retrying after {retry_after} seconds...", end='', flush=True)
-                for countdown in range(retry_after, 0, -1):
-                    print(f'\rRetrying in {countdown} seconds...', end='', flush=True)
-                    time.sleep(1)
-                print()  # Print newline after countdown completes
+                print(f"\rRate limited. Retrying after {retry_after} seconds...", end='', flush=True)
+                time.sleep(retry_after)
                 retries += 1
             elif response.status_code == 200:  # Success
                 return response
@@ -65,112 +62,33 @@ class RequestSender:
         }
 
 class deviceIDGenerator:
-    def __init__(self):
-        pass
-
     def generate_deviceId(self):
-        random_deviceId = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
-        random_deviceId += '-'
-        random_deviceId += ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
-        random_deviceId += '-'
-        random_deviceId += ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
-        random_deviceId += '-'
-        random_deviceId += ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
-        random_deviceId += '-'
-        random_deviceId += ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
-        return random_deviceId
-
-class MessageGenerator:
-    def __init__(self):
-        # self.generic_messages = [
-        # ]
-        
-        self.messages_hacker = [
-            " ",
-            " ",
-            " "
-        ]
-
-
-    def generate_message(self):
-        return random.choice(self.messages_hacker)
-    
-class GameSlugGenerator:
-    def __init__(self):
-        self.game_slugs = [
-            "",  
-            "confessions",  
-            "3words",  
-            "tbh",  
-            "shipme",  
-            "yourcrush",  
-            "cancelled",  
-            "dealbreaker"  
-        ]
-        
-    def generate_game_slug(self):
-        return random.choice(self.game_slugs)
-
-class GameSlugSelector:
-    def __init__(self):
-        self.game_slugs = {
-            "1": "",  
-            "2": "confessions",  
-            "3": "3words",  
-            "4": "tbh",  
-            "5": "shipme",  
-            "6": "yourcrush",  
-            "7": "cancelled",  
-            "8": "dealbreaker"  
-        }
-
-    def select_game_slug(self):
-        print("\nSelect a game slug:")
-        for key, value in self.game_slugs.items():
-            print(f"{key}: {value}")
-
-        while True:
-            choice = input("\nEnter your choice (1-8): ")
-            if choice in self.game_slugs.keys():
-                return self.game_slugs[choice]
-            else:
-                print("Invalid choice. Please enter a number between 1 and 8. - ")
+        return '-'.join([''.join(random.choices(string.ascii_lowercase + string.digits, k=part_length))
+                         for part_length in [8, 4, 4, 4, 12]])
 
 if __name__ == "__main__":
     load_dotenv()
-
     url = os.getenv("URL")
     request_sender = RequestSender(url)
-    message_generator = MessageGenerator()
-    game_slug_generator = GameSlugGenerator()
-    game_slug_selector = GameSlugSelector()
-
     username = input("Enter target username: ")
-    spam_choice = input("Do you want to spam? (yes/no): ").lower()
-    message_input = input("Enter your message: ")
-    if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
-        spam_count = int(input("How many times do you want to spam?: "))
-        for _ in range(spam_count):
-            # message = message_generator.generate_message()
+    spam_choice = input("Do you want to spam? (yes/no): ").lower().strip()
+    message_input = input("Enter your message or leave blank to use a default message: ") or "Default message"
+
+    if spam_choice in ["yes", "y", ""]:
+        spam_count = input("How many times do you want to spam? (Default is 10000): ").strip()
+        spam_count = int(spam_count) if spam_count.isdigit() else 10000
+
+        for i in range(spam_count):
             message = message_input
-            gameSlug = game_slug_generator.generate_game_slug()
             deviceId = deviceIDGenerator().generate_deviceId()
             referrer = ""
-            response = request_sender.send_request_with_retry(username, message, deviceId, gameSlug, referrer)
-            print(f'\n{_+1} of {spam_count}')
-            print(f'gameSlug: {gameSlug}')
-            # print(f'message : {message}')
+            response = request_sender.send_request_with_retry(username, message, deviceId)
+            print(f'\n{i+1} of {spam_count}')
             print(f'{response.status_code} {response.reason} = {response.text}')
+            print(f'message: {message}')
     else:
-        message = input("Enter your message: ")
-        gameSlug = game_slug_selector.select_game_slug()
+        message = message_input
         deviceId = os.getenv("DEVICE_ID")
         referrer = ""
-
-        # if not message:
-        #     message = message_generator.generate_message()  
-
-        response = request_sender.send_request_with_retry(username, message, deviceId, gameSlug, referrer)
-        print(f'gameSlug: {gameSlug}')
-        print(f'message : {message}')
+        response = request_sender.send_request_with_retry(username, message, deviceId)
         print(f'{response.status_code} {response.reason} = {response.text}')
