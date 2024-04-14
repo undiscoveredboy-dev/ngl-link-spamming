@@ -31,3 +31,5 @@ you just insert username target, your message, and choice the options.
      ```
 
 5. enter your target, your message, and choice the options.
+
+6. or try one of all files `send_custom.py`, `send_msg.py`, `send_random.py`.
