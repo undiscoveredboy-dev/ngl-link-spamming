@@ -200,7 +200,11 @@ if __name__ == "__main__":
     username = input("Enter target username: ")
     spam_choice = input("Do you want to spam? (yes/no): ").lower()
     if spam_choice == "yes" or spam_choice == "" or spam_choice == "y":
-        spam_count = int(input("How many times do you want to spam?: "))
+        try:
+            spam_count = int(input("How many times do you want to spam? (Enter a number or leave blank for default 9999): ").strip() or 9999)
+        except ValueError:
+            spam_count = 9999
+
         for _ in range(spam_count):
             message = message_generator.generate_message()  
             gameSlug = game_slug_generator.generate_game_slug()
