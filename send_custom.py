@@ -1,3 +1,11 @@
+'''
+created by: ridwaanhall
+date      : 16/04/2024
+instagram : ridwaanhall
+
+note: don't delete this watermark
+'''
+
 import os
 import sys
 import random
