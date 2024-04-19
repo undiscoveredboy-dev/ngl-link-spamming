@@ -15,94 +15,9 @@ import logging
 from dotenv import load_dotenv
 import requests
 from fake_useragent import UserAgent
+from random_generator import MessageGenerator, GameSlugGenerator
 
-# Configure logging
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s - %(levelname)s] %(message)s')
-
-
-class MessageGenerator:
-    def __init__(self):
-        self.generic_messages = [
-            "Hey there! Just wanted to drop a quick message to say hi and see how you're doing. Hope you're having a great day! 😊",
-            "Hi friend! Sending some positive vibes your way. Hope you're doing well!",
-            "Hey buddy! Remember, you're awesome and capable of achieving anything you set your mind to! 💪",
-            "Hello! Just checking in to see how you're doing. Let me know if there's anything I can do to support you!",
-            "Hi! Wishing you a fantastic day filled with joy and laughter. Keep shining bright! ✨",
-            "Hey! Hope your day is as amazing as you are! 😄",
-            "Hi there! Just wanted to remind you that you're appreciated and valued. Keep being awesome!",
-            "Hey friend! Just dropping by to say hello and spread some positivity your way. Have a wonderful day!",
-            "Hello! Sending you lots of love and good vibes. You've got this!",
-            "Hi! Remember, every challenge you face is an opportunity to grow stronger. Keep pushing forward!",
-            "Hey there! Just wanted to send a quick virtual hug your way. You're not alone, and I'm here for you!",
-            "Hi friend! Hope your day is filled with laughter, love, and all the good things in life. You deserve it!"
-        ]
-        
-        self.messages_hacker = [
-            "Initiating secure connection. Your digital presence is attracting attention. Stay vigilant. - ShadowCipher",
-            "Warning: Unusual activity detected in your online behavior. Exercise caution. - DarkNetOp",
-            "Cipher protocol activated. Your online actions have drawn scrutiny. Maintain discretion. - GhostHacker",
-            "Alert: Anomaly detected in network traffic. You may be under surveillance. - StealthByte",
-            "Security breach alert: Your digital footprint is being monitored. Take evasive action. - PhantomByte",
-            "Caution: Digital surveillance detected. Your activities are being watched closely. - CyberPhantom",
-            "Intrusion warning: Your online presence is under scrutiny. Stay under the radar. - CryptoGhost",
-            "Encryption compromised. Your digital identity may be at risk. Take precautions. - ShadowCipher",
-            "Attention: Suspicious network activity detected. Exercise heightened security measures. - DarkNetOp",
-            "Security protocol breached. Your digital security may have been compromised. - GhostHacker",
-            "Warning: Abnormal data flow detected in your network. Stay alert. - StealthByte",
-            "Code red: Unauthorized access detected. Your online security is under threat. - PhantomByte",
-            "Initiating secure transmission. Your digital activities have attracted attention. Stay covert. - CyberPhantom",
-            "Caution: Anomalies detected in network traffic. Proceed with caution. - CryptoGhost",
-            "Alert: Cipher protocol engaged. Your online presence may be compromised. - ShadowCipher",
-            "Security breach detected. Your digital identity is vulnerable. Take action. - DarkNetOp",
-            "Warning: Digital surveillance in progress. Maintain operational security. - GhostHacker",
-            "Attention: Unusual patterns detected in your online behavior. Stay under the radar. - StealthByte",
-            "Intrusion alert: Your online activities are being monitored. Stay low-key. - PhantomByte",
-            "Encryption compromised. Your digital security may be compromised. Take evasive action. - CyberPhantom",
-            "Alert: Suspicious network activity detected. Exercise caution in your online interactions. - CryptoGhost",
-            "Security protocol breached. Your digital footprint is attracting unwanted attention. - ShadowCipher",
-            "Code red: Unauthorized access detected. Take measures to protect your online security. - DarkNetOp",
-            "Initiating secure communication. Your digital presence is under scrutiny. Maintain discretion. - GhostHacker",
-            "Caution: Abnormal data flow detected. Your online activities may be compromised. - StealthByte",
-            "Alert: Cipher protocol activated. Your digital security is at risk. Take precautions. - PhantomByte",
-            "Security breach detected. Your digital privacy may be compromised. Take evasive action. - CyberPhantom",
-            "Warning: Digital surveillance detected. Exercise caution in your online interactions. - CryptoGhost",
-            "Attention: Unusual activity detected in your network. Stay alert. - ShadowCipher",
-            "Intrusion warning: Your digital footprint has been noticed. Stay under the radar. - DarkNetOp",
-            "Encryption compromised. Your online security may be compromised. Take action. - GhostHacker",
-            "Alert: Suspicious network activity detected. Proceed with caution in your online activities. - StealthByte",
-            "Security protocol breached. Your digital identity is vulnerable. Take evasive action. - PhantomByte",
-            "Code red: Unauthorized access detected. Exercise caution in your digital interactions. - CyberPhantom",
-            "Initiating secure transmission. Your digital presence is under surveillance. Stay covert. - CryptoGhost",
-            "Caution: Anomalies detected in network traffic. Maintain operational security. - ShadowCipher",
-            "Alert: Cipher protocol engaged. Your digital privacy may be compromised. - DarkNetOp",
-            "Security breach detected. Your online activities are being monitored. Take action. - GhostHacker",
-            "Warning: Digital surveillance in progress. Stay low-key in your online interactions. - StealthByte",
-            "Attention: Unusual patterns detected in your online behavior. Exercise caution. - PhantomByte",
-            "Intrusion alert: Your digital security may be compromised. Stay vigilant. - CyberPhantom"
-        ]
-
-    def generate_message(self):
-        if random.random() < 1:
-            return random.choice(self.messages_hacker)
-        else:
-            return random.choice(self.generic_messages)
-
-class GameSlugGenerator:
-    def __init__(self):
-        self.game_slugs = [
-            "",  
-            "confessions",  
-            "3words",  
-            "tbh",  
-            "shipme",  
-            "yourcrush",  
-            "cancelled",  
-            "dealbreaker"  
-        ]
-        
-    def generate_game_slug(self):
-        return random.choice(self.game_slugs)
-
 
 class RequestSender:
     '''
@@ -132,7 +47,7 @@ class RequestSender:
         }
         try:
             response = requests.post(self.url, headers=headers, data=data)
-            response.raise_for_status()  # This will handle HTTP errors which are 400 and above
+            response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logging.error(f"HTTP Error: {e}")
             return None
@@ -205,7 +120,7 @@ if __name__ == "__main__":
     '''
     print(pesan)
     request_sender = RequestSender(url)
-    username = input("Enter target username: ").strip()
+    username = input("Enter target username: ").strip().lower()
     if not username:
         logging.error("Username is required. Exiting.")
         sys.exit(1)
@@ -220,9 +135,9 @@ if __name__ == "__main__":
     game_slug_generator = GameSlugGenerator()
     if spam_choice in ["yes", "y", ""]:
         spam_count = input("How many times do you want to spam? (Default is 9999): ")
+        print()
         spam_count = int(spam_count) if spam_count.isdigit() else 9999
 
-        # Determine the number of digits needed for the spam count
         count_format = f'{{:0{len(str(spam_count))}d}}'
 
         for i in range(spam_count):
