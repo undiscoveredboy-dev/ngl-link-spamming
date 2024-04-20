@@ -9,13 +9,12 @@ note: don't delete this watermark
 import os
 import sys
 import random
-import string
 import time
 import logging
 from dotenv import load_dotenv
 import requests
 from fake_useragent import UserAgent
-from random_generator import MessageGenerator, GameSlugGenerator
+from generator import MessageGenerator, GameSlugGenerator, DeviceIDGenerator, UserRegionGenerator
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s - %(levelname)s] %(message)s')
 
@@ -50,10 +49,12 @@ class RequestSender:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             logging.error(f"HTTP Error: {e}")
-            return None
+            # print(response.text)
+            return response
         except requests.exceptions.RequestException as e:
             logging.error(f"Request Failed: {e}")
-            return None
+            # print(response.text)
+            return response
         return response
 
     def send_request_with_retry(self, username, question, device_id, game_slug, referrer='', max_retries=3):
@@ -100,15 +101,6 @@ class RequestSender:
             'User-Agent': self.user_agent.random
         }
 
-class DeviceIDGenerator:
-    '''
-    Generates device ID for the request.
-    '''
-    @staticmethod
-    def generate_device_id():
-        return '-'.join([''.join(random.choices(string.ascii_lowercase + string.digits, k=part_length))
-                         for part_length in [8, 4, 4, 4, 12]])
-
 if __name__ == "__main__":
     load_dotenv()
     url = os.getenv("URL")
@@ -150,8 +142,12 @@ if __name__ == "__main__":
                 try:
                     response_data = response.json()
                     question_id = response_data.get("questionId", "Unknown ID")
-                    user_region = response_data.get("userRegion", "Unknown Region")
-                    logging.info(f"({count_format.format(i+1)} of {count_format.format(spam_count)}) {response.status_code} {response.reason} {user_region} {username.upper()} -> {game_slug.upper()} '{message_input.upper()}'")
+                    
+                    # Get user region code from the response and use the generator to get the full country name
+                    user_region_code = response_data.get("userRegion", "Unknown Region")
+                    user_region_name = UserRegionGenerator.get_country_name(user_region_code)
+                    
+                    logging.info(f"({count_format.format(i+1)} of {count_format.format(spam_count)}) {response.status_code} {response.reason} {username.upper()} FROM {user_region_name.upper()} -> '{game_slug.upper()}'") # '{message_input.upper()}'
                 except ValueError:
                     logging.error("Failed to decode JSON from response.")
             else:
