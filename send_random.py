@@ -54,7 +54,7 @@ class RequestSender:
         except requests.exceptions.RequestException as e:
             logging.error(f"Request Failed: {e}")
             # print(response.text)
-            return response
+            # return response
         return response
 
     def send_request_with_retry(self, username, question, device_id, game_slug, referrer='', max_retries=3):
