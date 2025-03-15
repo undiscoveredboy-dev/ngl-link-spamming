@@ -42,12 +42,6 @@ class GameSlugGenerator:
         self.game_slugs = [
             "",  
             "confessions",  
-            "3words",  
-            "tbh",  
-            "shipme",  
-            "yourcrush",  
-            "cancelled",  
-            "dealbreaker"  
         ]
         
     def generate_game_slug(self):
