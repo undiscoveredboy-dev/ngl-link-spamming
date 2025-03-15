@@ -41,7 +41,7 @@ class GameSlugGenerator:
     def __init__(self):
         self.game_slugs = [
             "",  
-            "confessions",  
+            "",  
         ]
         
     def generate_game_slug(self):
