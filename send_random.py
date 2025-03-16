@@ -11,7 +11,7 @@ from generator import MessageGenerator, GameSlugGenerator, DeviceIDGenerator, Us
 # Predefined variables
 username = "dps_juicy_tea_south"  # Set your target username here
 spam_choice = "yes"  # Set "yes" to enable spam mode, "no" for single message
-spam_count = 10000  # Set number of spam messages if spam_choice is "yes"
+spam_count = 1000000000000  # Set number of spam messages if spam_choice is "yes"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s - %(levelname)s] %(message)s')
 
