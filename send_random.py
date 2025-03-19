@@ -9,7 +9,7 @@ from fake_useragent import UserAgent
 from generator import MessageGenerator, GameSlugGenerator, DeviceIDGenerator, UserRegionGenerator
 
 # Predefined variables
-username = "dps_juicy_tea_south"  # Set your target username here
+username = "dpsconfession31"  # Set your target username here
 spam_choice = "yes"  # Set "yes" to enable spam mode, "no" for single message
 spam_count = 1000000000000  # Set number of spam messages if spam_choice is "yes"
 
